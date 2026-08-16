@@ -14,6 +14,7 @@ Statische PWA – jährliche Checkliste für die Winterfestmachung des Pools, in
 - 3 Tabs (Bottom-Tab-Bar Variante A): Einwintern / Während dessen / Danach
 - Checkbox-Zustand pro Punkt in `localStorage` (`pew_state`), Fortschrittsbalken oben
 - Dark/Light: automatisch per `prefers-color-scheme` + manueller Umschalter im Info-Sheet (`pew_theme` in `localStorage`)
+- Wisch-Geste zwischen Tabs (links/rechts auf `#main`, 60px-Schwelle, kein Wraparound) – siehe `BKM/PWA-Standards.md` „Wisch-Geste zwischen Tabs"
 - Kein Login, kein Backend – bewusst abweichend vom OrgKompass-Pattern, da kein Claude-API-Einsatz und keine sensiblen Daten
 
 ## Warum GitHub Pages statt Hetzner-Static (ADR-001)
