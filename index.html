@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Pool Einwintern</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" id="theme-color-meta" content="#f2f2f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Pool Einwintern">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<style>
+:root {
+  --bg:     #f2f2f7;
+  --bg2:    #ffffff;
+  --bg3:    #e5e5ea;
+  --accent: #0a5fa8;
+  --accent-text: #ffffff;
+  --text:   #000000;
+  --muted:  #6e6e73;
+  --border: #d1d1d6;
+  --green:  #34c759;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:     #1c1c1e;
+    --bg2:    #2c2c2e;
+    --bg3:    #3a3a3c;
+    --accent: #3d9bf0;
+    --accent-text: #ffffff;
+    --text:   #ffffff;
+    --muted:  #aeaeb2;
+    --border: #48484a;
+    --green:  #30d158;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:     #1c1c1e;
+  --bg2:    #2c2c2e;
+  --bg3:    #3a3a3c;
+  --accent: #3d9bf0;
+  --accent-text: #ffffff;
+  --text:   #ffffff;
+  --muted:  #aeaeb2;
+  --border: #48484a;
+  --green:  #30d158;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+header {
+  background: var(--accent); color: #fff;
+  padding: calc(14px + env(safe-area-inset-top)) 16px 14px;
+  padding-left: calc(16px + env(safe-area-inset-left));
+  padding-right: calc(16px + env(safe-area-inset-right));
+  display: flex; align-items: center; justify-content: space-between;
+}
+header h1 { font-size: 1.15rem; margin: 0; font-weight: 700; }
+#btn-info { background: rgba(255,255,255,.15); border: none; color: #fff; height: 34px; padding: 0 12px; border-radius: 9px; font-size: 13px; font-weight: 600; letter-spacing: .3px; cursor: pointer; }
+#btn-info:active { background: rgba(255,255,255,.3); }
+
+.progress-wrap { padding: 12px 16px 4px; padding-left: calc(16px + env(safe-area-inset-left)); padding-right: calc(16px + env(safe-area-inset-right)); }
+.progress-label { display: flex; justify-content: space-between; font-size: .8rem; color: var(--muted); margin-bottom: 6px; }
+.progress-bar { height: 8px; border-radius: 4px; background: var(--bg3); overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--green); border-radius: 4px; transition: width .25s ease; width: 0%; }
+
+main { padding: 8px 16px calc(84px + env(safe-area-inset-bottom));
+  padding-left: calc(16px + env(safe-area-inset-left));
+  padding-right: calc(16px + env(safe-area-inset-right));
+  min-height: 60vh;
+}
+.section-title { font-size: .78rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin: 18px 4px 8px; }
+.section-title:first-child { margin-top: 6px; }
+
+.item {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--bg2); border-radius: 14px; padding: 13px 14px;
+  margin-bottom: 8px; cursor: pointer; min-height: 44px;
+  border: 1px solid var(--border);
+}
+.item:active { opacity: .85; }
+.item .box {
+  flex-shrink: 0; width: 24px; height: 24px; border-radius: 7px;
+  border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center;
+  margin-top: 1px; transition: background .15s, border-color .15s;
+}
+.item.done .box { background: var(--green); border-color: var(--green); }
+.item .box svg { opacity: 0; transition: opacity .1s; }
+.item.done .box svg { opacity: 1; }
+.item .txt { font-size: .93rem; line-height: 1.4; }
+.item.done .txt { color: var(--muted); text-decoration: line-through; }
+
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 250; display: flex; background: var(--bg2); border-top: 1px solid var(--bg3); box-shadow: 0 -2px 10px rgba(0,0,0,.08); padding-bottom: env(safe-area-inset-bottom); padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+.tab { flex: 1; background: none; border: none; color: var(--muted); font-size: .68rem; font-weight: 600; padding: 8px 0 6px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+.tab.active { color: var(--accent); }
+.tab .badge { position: absolute; margin-left: 14px; margin-top: -4px; background: var(--green); color: #fff; font-size: .6rem; border-radius: 8px; padding: 1px 5px; }
+
+.back-top { position: fixed; bottom: calc(70px + env(safe-area-inset-bottom)); right: 16px; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 20px; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,.25); display: none; align-items: center; justify-content: center; z-index: 200; }
+.back-top.vis { display: flex; }
+
+.ptr { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: var(--bg2); border-radius: 20px; padding: 8px 16px; font-size: .85rem; color: var(--muted); display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 12px rgba(0,0,0,.15); transition: top .2s ease; z-index: 100; }
+.ptr.show { top: calc(env(safe-area-inset-top) + 10px); }
+.ptr-spin { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--bg3); border-top-color: var(--accent); animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#info-overlay { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,.4); }
+#info-overlay.show { display: flex; align-items: flex-end; }
+#info-sheet { background: var(--bg2); border-radius: 20px 20px 0 0; width: 100%; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 -4px 20px rgba(0,0,0,.15); }
+#info-sheet-hd { padding: 14px 16px 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+#btn-info-close { background: var(--bg3); border: none; border-radius: 16px; padding: 5px 14px; font-size: 13px; cursor: pointer; color: var(--text); }
+#info-sheet-body { overflow-y: auto; padding: 16px 16px calc(20px + env(safe-area-inset-bottom)); -webkit-overflow-scrolling: touch; }
+#info-sheet-body p { font-size: .9rem; line-height: 1.5; color: var(--text); }
+
+.theme-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 2px; border-top: 1px solid var(--border); margin-top: 8px; }
+.theme-switch { position: relative; width: 46px; height: 27px; border-radius: 14px; background: var(--bg3); cursor: pointer; border: none; padding: 0; }
+.theme-switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 23px; height: 23px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: left .15s; }
+.theme-switch[aria-checked="true"] { background: var(--accent); }
+.theme-switch[aria-checked="true"]::after { left: 21px; }
+
+.btn-reset { width: 100%; padding: 14px; background: var(--bg3); color: var(--text); border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; min-height: 50px; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-reset:active { opacity: .8; }
+</style>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('pew_theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+
+<div class="ptr" id="ptr"><div class="ptr-spin"></div> Aktualisiere…</div>
+
+<header>
+  <h1>Pool Einwintern</h1>
+  <button id="btn-info" aria-label="Info">Info</button>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label"><span id="progress-text">0 / 0 erledigt</span><span id="progress-pct">0%</span></div>
+  <div class="progress-bar"><div class="progress-bar-fill" id="progress-fill"></div></div>
+</div>
+
+<main id="main"></main>
+
+<nav class="tabs" id="tabs"></nav>
+
+<button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
+
+<div id="info-overlay" onclick="if(event.target===this)closeInfo()">
+  <div id="info-sheet">
+    <div id="info-sheet-hd">
+      <strong>Info</strong>
+      <button id="btn-info-close" onclick="closeInfo()">Schließen</button>
+    </div>
+    <div id="info-sheet-body">
+      <p><strong>Pool Einwintern</strong> ist eine Checkliste für die jährliche Winterfestmachung des Pools – in drei Phasen: Einwintern, Während dessen, Danach. Antippen eines Punkts hakt ihn ab, der Fortschritt wird auf diesem Gerät gespeichert.</p>
+      <div class="theme-row">
+        <span>Dunkles Design</span>
+        <button class="theme-switch" id="theme-switch" role="switch" aria-checked="false" onclick="toggleTheme()"></button>
+      </div>
+      <button class="btn-reset" id="btn-reset" onclick="resetChecklist()"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ICON_PATHS = {
+  droplet: `<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>`,
+  wrench: `<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"/>`,
+  snowflake: `<path d="m10 20-1.25-2.5L6 18"/><path d="M10 4 8.75 6.5 6 6"/><path d="m14 20 1.25-2.5L18 18"/><path d="m14 4 1.25 2.5L18 6"/><path d="m17 21-3-6h-4"/><path d="m17 3-3 6 1.5 3"/><path d="M2 12h6.5L10 9"/><path d="m20 10-1.5 2 1.5 2"/><path d="M22 12h-6.5L14 15"/><path d="m4 10 1.5 2L4 14"/><path d="m7 21 3-6-1.5-3"/><path d="m7 3 3 6h4"/>`,
+  check: `<path d="M20 6 9 17l-5-5"/>`,
+  rotateCcw: `<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>`
+};
+function icon(name, size=18, filled=false) {
+  const p = ICON_PATHS[name] || "";
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${filled?"currentColor":"none"}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+}
+
+const DATA = [
+  { id: 'einwintern', label: 'Einwintern', icon: 'droplet', items: [
+    { id: 'e1', text: 'Wasser: pH-Wert einstellen auf 7,0–7,4 → Schockchlorung' },
+    { id: 'e2', text: 'Wasser ablassen + Rückspülen' },
+    { id: 'e3', text: 'Schacht: Bodenablauf ganz öffnen, Skimmer schließen' },
+    { id: 'e4', text: 'Wasser ablassen bis unter Gegenströmer' },
+  ]},
+  { id: 'waehrend', label: 'Während dessen', icon: 'wrench', items: [
+    { id: 'w1', text: 'Heizraum: Wasser und Heizung abdrehen' },
+    { id: 'w2', text: 'Pooldusche: Wasser ablassen und Teile abbauen. Boden-Ablassschraube komplett wegschrauben' },
+    { id: 'w3', text: 'Bachlauf ablassen: 7+ Rohre' },
+    { id: 'w4', text: 'Blenden verbaut lassen' },
+    { id: 'w5', text: 'Motor Gegenströmer verbaut lassen' },
+    { id: 'w6', text: 'Gegenströmer entleeren (Schrauben unten und oben – 13er Ratschenschlüssel)' },
+    { id: 'w7', text: 'Robbie nochmal laufen lassen' },
+  ]},
+  { id: 'danach', label: 'Danach', icon: 'snowflake', items: [
+    { id: 'd1', text: 'Pumpe entleeren (Plastikschraube unten), Filter ausbauen und Deckel offen lassen' },
+    { id: 'd2', text: 'Einwinterungsmittel rundrum eingießen (1,5 l Puripool)' },
+    { id: 'd3', text: 'Leitungen absperren und entwässern' },
+    { id: 'd4', text: 'pH-Minus Membranschlauch ausbauen' },
+    { id: 'd5', text: 'pH-Minus- und Redox-Sonden ausbauen (rot/blau), Aufbewahrungsdöschen mit Wasser befüllen, Sonden einstecken, aufrecht und frostfrei lagern' },
+    { id: 'd6', text: 'Elektrolyse nicht entwässern' },
+    { id: 'd7', text: 'Sandfilter ablassen mit Gartenschlauch (Filterkessel unten, Plastiknase locker drehen)' },
+    { id: 'd8', text: 'Sandfilter entlüften (Deckel oben / über Winter offen lassen)' },
+    { id: 'd9', text: 'Regler in Winterstellung (Schneeflocke)' },
+    { id: 'd10', text: 'Haltestange zu Holger Massinger – polieren' },
+  ]},
+];
+
+const TOTAL = DATA.reduce((n, s) => n + s.items.length, 0);
+const STATE = { tab: DATA[0].id, checked: loadChecked() };
+
+function loadChecked() {
+  try { return JSON.parse(localStorage.getItem('pew_state')) || {}; } catch (e) { return {}; }
+}
+function saveChecked() {
+  try { localStorage.setItem('pew_state', JSON.stringify(STATE.checked)); } catch (e) {}
+}
+
+function toggleItem(id) {
+  STATE.checked[id] = !STATE.checked[id];
+  saveChecked();
+  render();
+}
+
+function switchTab(tabId) {
+  STATE.tab = tabId;
+  renderTabBar();
+  renderMain();
+  window.scrollTo({ top: 0 });
+}
+
+function renderTabBar() {
+  document.getElementById('tabs').innerHTML = DATA.map(s => {
+    const active = s.id === STATE.tab;
+    return `<button class="tab${active ? ' active' : ''}" onclick="switchTab('${s.id}')">${icon(s.icon, 20)}${escHtml(s.label)}</button>`;
+  }).join('');
+}
+
+function renderMain() {
+  const section = DATA.find(s => s.id === STATE.tab);
+  const doneInSection = section.items.filter(i => STATE.checked[i.id]).length;
+  document.getElementById('main').innerHTML =
+    `<div class="section-title">${escHtml(section.label)} — ${doneInSection}/${section.items.length}</div>` +
+    section.items.map(it => {
+      const done = !!STATE.checked[it.id];
+      return `<div class="item${done ? ' done' : ''}" onclick="toggleItem('${it.id}')">
+        <div class="box">${icon('check', 15)}</div>
+        <div class="txt">${escHtml(it.text)}</div>
+      </div>`;
+    }).join('');
+}
+
+function renderProgress() {
+  const done = Object.values(STATE.checked).filter(Boolean).length;
+  const pct = TOTAL ? Math.round(done / TOTAL * 100) : 0;
+  document.getElementById('progress-text').textContent = `${done} / ${TOTAL} erledigt`;
+  document.getElementById('progress-pct').textContent = `${pct}%`;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function render() {
+  renderTabBar();
+  renderMain();
+  renderProgress();
+}
+
+function escHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function resetChecklist() {
+  STATE.checked = {};
+  saveChecked();
+  render();
+}
+
+// Info-Sheet
+function openInfo() { document.getElementById('info-overlay').classList.add('show'); }
+function closeInfo() { document.getElementById('info-overlay').classList.remove('show'); }
+document.getElementById('btn-info').addEventListener('click', openInfo);
+
+// Dark/Light Toggle
+function applyTheme(mode) {
+  if (mode === 'light' || mode === 'dark') {
+    document.documentElement.setAttribute('data-theme', mode);
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  const dark = mode === 'dark' || (mode !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.getElementById('theme-color-meta').setAttribute('content', dark ? '#1c1c1e' : '#f2f2f7');
+  document.getElementById('theme-switch').setAttribute('aria-checked', String(dark));
+}
+function toggleTheme() {
+  const current = localStorage.getItem('pew_theme');
+  const isDark = current === 'dark' || (current !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const next = isDark ? 'light' : 'dark';
+  try { localStorage.setItem('pew_theme', next); } catch (e) {}
+  applyTheme(next);
+}
+
+// Scroll-to-Top
+window.addEventListener('scroll', () => {
+  document.getElementById('back-top').classList.toggle('vis', window.scrollY > 300);
+});
+
+// Pull-to-Refresh
+const ptrEl = document.getElementById('ptr');
+let ptrStartY = 0, ptrActive = false;
+document.addEventListener('touchstart', e => {
+  if (window.scrollY === 0) { ptrStartY = e.touches[0].clientY; ptrActive = true; }
+}, { passive: true });
+document.addEventListener('touchmove', e => {
+  if (!ptrActive) return;
+  if (e.touches[0].clientY - ptrStartY > 50) ptrEl.classList.add('show');
+}, { passive: true });
+document.addEventListener('touchend', e => {
+  if (!ptrActive) return;
+  const dy = e.changedTouches[0].clientY - ptrStartY;
+  if (dy > 80) location.reload();
+  ptrEl.classList.remove('show');
+  ptrActive = false;
+}, { passive: true });
+
+// Init
+document.getElementById('btn-reset').innerHTML = icon('rotateCcw', 18) + ' Checkliste zurücksetzen';
+applyTheme(localStorage.getItem('pew_theme'));
+render();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/PoolEinwintern/sw.js', { scope: '/PoolEinwintern/' })
+    .catch(e => console.warn('[sw]', e));
+}
+</script>
+</body>
+</html>
